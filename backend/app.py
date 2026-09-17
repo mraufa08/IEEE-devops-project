@@ -2,13 +2,24 @@ import os
 
 import psycopg
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql://ieee_user:ieee_password@localhost:5432/ieee_app",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+    "http://localhost:5173",
+    "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

@@ -1,5 +1,16 @@
 services:
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:3000"
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
   backend:
     build: ./backend
     ports:
