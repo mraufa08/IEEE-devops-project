@@ -1,6 +1,15 @@
+import os
+
+import psycopg
 from fastapi import FastAPI
 
 app = FastAPI()
+
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://ieee_user:ieee_password@localhost:5432/ieee_app",
+)
 
 
 @app.get("/")
@@ -12,6 +21,11 @@ def home():
 def health():
     return {"status": "ok"}
 
-@app.get("/testing")
-def testing():
-    return {"message": "This is a testing endpoint."}
+
+@app.get("/db-health")
+def database_health():
+    try:
+        with psycopg.connect(DATABASE_URL) as connection:
+            return {"database": "ok"}
+    except Exception:
+        return {"database": "error"}
